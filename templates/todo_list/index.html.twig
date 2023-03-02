@@ -10,10 +10,22 @@
 
 <div class="example-wrapper">
     <h1>Todo List : </h1>
+<table>
+<thead>
+<tr>
+<td>n°</td><td>date</td><td>description</td><td>comment</td>
+</tr>
+</thead>
+<tbody>
+    {% for todo in todo_list%}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+<td>{{ todo.description }}</td>
+<td>{{ todo.comment }}</td>
+<td><button >OK</button></td>
+</tr>
+{% endfor %}
 
-
-
-    <ul>
-    </ul>
 </div>
 {% endblock %}
