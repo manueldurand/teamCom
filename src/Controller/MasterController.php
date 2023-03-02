@@ -16,4 +16,10 @@ class MasterController extends AbstractController
             'firstname' => 'Manuel'
         ]);
     }
+
+    #[Route("/master/{name}", name:"bonjour")]
+    public function bonjour($name)
+    {
+        return $this->render('master/bonjour.html.twig', ['nom' => $name]);
+    }
 }
