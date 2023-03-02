@@ -17,7 +17,7 @@ class TodoListType extends AbstractType
         $builder
             ->add('description', TextType::class)
             ->add('comment', TextType::class)
-            ->add('save', SubmitType::class)
+            ->add('save', SubmitType::class,  ['label' => 'Create Task'])
 
         ;
     }

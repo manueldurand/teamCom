@@ -30,13 +30,17 @@ class TodoListController extends AbstractController
     {
         // creates a task object and initializes some data for this example
         $task = new Todolist();
-        $task->setDescription('Write a blog post');
-        $task->setComment('commencer...');
         $form = $this->createFormBuilder($task)
             ->add('description', TextType::class)
             ->add('comment', TextType::class)
             ->add('save', SubmitType::class, ['label' => 'Create Task'])
-            ->getForm();           
+            ->getForm();
+        
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $form->getData();
+        }
+
 
         return $this->render('todo_list/new.html.twig', [
             'form' => $form->createView(),
