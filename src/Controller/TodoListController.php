@@ -39,7 +39,7 @@ class TodoListController extends AbstractController
             ->getForm();           
 
         return $this->render('todo_list/new.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
         
 
