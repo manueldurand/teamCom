@@ -24,7 +24,7 @@
 <td>{{ todo.created|date("d/m/Y") }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
-<td><button>SUPPRIMER</button></td>
+<td><a href="/todolist/delete/{id}" ><button>SUPPRIMER</button></a></td>
 </tr>
 {% endfor %}
 
