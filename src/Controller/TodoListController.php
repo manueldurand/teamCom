@@ -31,11 +31,8 @@ class TodoListController extends AbstractController
     {
         // creates a task object and initializes some data for this example
         $task = new Todolist();
-        $form = $this->createFormBuilder($task)
-            ->add('description', TextType::class)
-            ->add('comment', TextType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
-            ->getForm();
+        $form = $this->createForm(TodoListType::class, $task);
+    
         
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
