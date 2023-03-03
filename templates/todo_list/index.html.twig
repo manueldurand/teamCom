@@ -24,9 +24,19 @@
 <td>{{ todo.created|date("d/m/Y") }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
-<td><a href="/todolist/delete/{{todo.id}}" ><button>SUPPRIMER</button></a></td>
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button type="submit">Supprimer</button>
+</form></td>
 </tr>
 {% endfor %}
 <a href="{{path('logout')}}" ><button>se déconnecter</button></a>
+
+
+
 </div>
+{#<a href="/todolist/delete/{{todo.id}}" ><button>SUPPRIMER</button></a>
+{{ url('/todolist/delete', { id: todo.id }) }}#}
 {% endblock %}

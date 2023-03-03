@@ -7,9 +7,6 @@ use App\Form\TodoListType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,13 +53,20 @@ class TodoListController extends AbstractController
 
         
     }
-    #[Route('/todolist/delete/{id}', methods:['GET' , 'DELETE'], name:'todo_delete')]
-    public function delete(int $id, EntityManagerInterface $em ): Response
+    #[Route('/todolist/delete/{id}', name:'todo_delete')]
+    public function delete(int $id, EntityManagerInterface $em, Request $request ): Response
     {
-       $task = $em->getRepository(TodoList::class)->find($id);
-       $em->remove($task);
-       $em->flush();
 
+       $submittedToken = $request->request->get('token');
+       if ($this->isCsrfTokenValid('delete-item', $submittedToken))
+       {
+        $task = $em->getRepository(TodoList::class)->find($id);
+        $em->remove($task);
+        $em->flush();
+
+       }
+        
+       
         return $this->redirectToRoute('todo_list');
     }
 
