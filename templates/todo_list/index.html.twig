@@ -10,7 +10,8 @@
 
 <div class="example-wrapper">
     <h1>Todo List : </h1>
-    <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
+    <h2>Bonjour {{ nom }}</h2>
+
 <table>
 <thead>
 <tr>
@@ -24,15 +25,17 @@
 <td>{{ todo.created|date("d/m/Y") }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
+{% if is_granted('ROLE_USER') %}
 <td><form action="todolist/delete/{{todo.id}}" method="post">
     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
     <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
 
     <button type="submit">Supprimer</button>
 </form></td>
+{% endif %}
 </tr>
 {% endfor %}
-<a href="{{path('logout')}}" ><button>se déconnecter</button></a>
+
 
 
 

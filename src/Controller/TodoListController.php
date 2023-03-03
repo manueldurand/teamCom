@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\User;
 use App\Entity\TodoList;
 use App\Form\TodoListType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,9 +17,19 @@ class TodoListController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $todo_list = $doctrine->getRepository(TodoList::class)->findAll();
+        if  ($this->isGranted('IS_AUTHENTICATED_FULLY')){
+            
+
+            $user = $this->getUser()->getNom();
+        } else {
+            $user = '';
+        }
+        
 
         return $this->render('todo_list/index.html.twig', [
             'todo_list' => $todo_list,
+            'nom' => $user,
+            
         ]);
     }
 
