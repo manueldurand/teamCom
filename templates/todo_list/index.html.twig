@@ -10,7 +10,7 @@
 
 <div class="example-wrapper">
     <h1>Todo List : </h1>
-    <a href="{{path('new_todo')}}">Ajouter</a>
+    <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
 <table>
 <thead>
 <tr>
@@ -27,6 +27,6 @@
 <td><a href="/todolist/delete/{{todo.id}}" ><button>SUPPRIMER</button></a></td>
 </tr>
 {% endfor %}
-
+<a href="{{path('logout')}}" ><button>se déconnecter</button></a>
 </div>
 {% endblock %}

@@ -21,6 +21,9 @@ security:
             form_login: 
                 login_path: app_login
                 check_path: app_login
+            logout:
+                path: logout
+                target: app_login
 
 
             # activate different ways to authenticate
