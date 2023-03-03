@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\TodoList;
 use App\Form\TodoListType;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,7 +27,7 @@ class TodoListController extends AbstractController
     }
 
     #[Route('/todolist/new', name: 'new_todo')]
-    public function new (Request $request): Response
+    public function new (Request $request, EntityManagerInterface $em): Response
     {
         // creates a task object and initializes some data for this example
         $task = new Todolist();
@@ -39,11 +40,20 @@ class TodoListController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
+            $todo = new TodoList();
+            $todo->setDescription($task->getDescription());
+            $todo->setComment($task->getComment());
+            $em->persist($task);
+            $em->flush();
+
+            return $this->redirectToRoute('todo_list');
+
         }
 
 
         return $this->render('todo_list/new.html.twig', [
             'form' => $form->createView(),
+            'data' => $task
         ]);
         
 

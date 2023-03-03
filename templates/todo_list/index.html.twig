@@ -10,6 +10,7 @@
 
 <div class="example-wrapper">
     <h1>Todo List : </h1>
+    <a href="{{path('new_todo')}}">Ajouter</a>
 <table>
 <thead>
 <tr>
@@ -23,7 +24,7 @@
 <td>{{ todo.created|date("d/m/Y") }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
-<td><button >OK</button></td>
+<td><button>SUPPRIMER</button></td>
 </tr>
 {% endfor %}
 
