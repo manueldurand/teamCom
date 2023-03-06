@@ -12,10 +12,11 @@
     <h1>Todo List : </h1>
     <h2>Bonjour {{ nom }}</h2>
 
-<table>
+<table border>
 <thead>
 <tr>
 <td>n°</td><td>date</td><td>auteur</td><td>description</td><td>comment</td>
+<td>modif/</td><td>par</td><td>date</td>
 </tr>
 </thead>
 <tbody>
@@ -26,6 +27,10 @@
 <td>{{ todo.auteur }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
+<td>{{ todo.reponse }}</td>
+<td>{{ todo.auteurReponse }}</td>
+<td>{{ todo.dateReponse|date("d/m/Y")}}</td>
+
 {% if is_granted('ROLE_USER') %}
 <td><form action="todolist/delete/{{todo.id}}" method="post">
     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
@@ -33,6 +38,8 @@
 
     <button type="submit">Supprimer</button>
 </form></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button>modifier</button></a></td>
+
 {% endif %}
 </tr>
 {% endfor %}
