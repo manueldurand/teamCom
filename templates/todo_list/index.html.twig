@@ -10,12 +10,12 @@
 
 <div class="example-wrapper">
     <h1>Todo List : </h1>
-    <h2>Bonjour {{ nom }}</h2>
+    <h2 class="ml-10" >Bonjour {{ nom }}</h2>
 
-<table border>
+<table class="table" border>
 <thead>
-<tr>
-<td>n°</td><td>date</td><td>auteur</td><td>description</td><td>comment</td>
+<tr class="">
+<td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
 <td>modif/</td><td>par</td><td>date</td>
 </tr>
 </thead>
@@ -25,7 +25,7 @@
 <td>{{ todo.id }}</td>
 <td>{{ todo.created|date("d/m/Y") }}</td>
 <td>{{ todo.auteur }}</td>
-<td>{{ todo.description }}</td>
+<td class="col-4">{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
 <td>{{ todo.reponse }}</td>
 <td>{{ todo.auteurReponse }}</td>
@@ -36,9 +36,9 @@
     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
     <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
 
-    <button type="submit">Supprimer</button>
+    <button class="text-bg-danger p-3" type="submit">Supprimer</button>
 </form></td>
-<td><a href="{{path('update_todo', {id: todo.id})}}"><button>modifier</button></a></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-3" >modifier</button></a></td>
 
 {% endif %}
 </tr>
