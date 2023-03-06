@@ -4,8 +4,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\TodoList;
 use App\Form\TodoListType;
-use App\Form\UpdateFormType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,14 +43,18 @@ class TodoListController extends AbstractController
         // creates a task object and initializes some data for this example
         $task = new Todolist();
         $form = $this->createForm(TodoListType::class, $task);
+        $user = $this->getUser();
+        $username = $user->getNom();
+        dump($username);
     
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
             $username = $user->getNom();
             $task = $form->getData();
             $todo = new TodoList();
-            $todo->setAuteur($username);
+            $todo->setAuteur($user->getNom());
             $todo->setDescription($task->getDescription());
             $todo->setComment($task->getComment());
             $em->persist($todo);
@@ -61,38 +63,18 @@ class TodoListController extends AbstractController
             return $this->redirectToRoute('todo_list', [
                 'user' => $user,
             ]);
+
         }
+
+
         return $this->render('todo_list/new.html.twig', [
             'form' => $form->createView(),
             'data' => $task
-        ]);  
-    }
-
-    #[Route('/todolist/update/{id}', name: 'update_todo')]
-    public function update_todo(int $id, Request $request, EntityManagerInterface $em)
-    {
-        $todo = $em->getRepository(TodoList::class)->find($id);
-        $updateForm = $this->createForm(UpdateFormType::class, $todo);
-
-        $updateForm->handleRequest($request);
-        if($updateForm->isSubmitted() && $updateForm->isValid()) {
-            $user = $this->getUser();
-            $username = $user->getNom();
-            $updateTask = $updateForm->getData();
-            $todo->setReponse($updateTask->getReponse());
-            $todo->setAuteurReponse($username);
-            $em->persist($todo);
-            $em->flush();
-            return $this->redirectToRoute('todo_list', [
-                'user' => $user,
-            ]);
-        }
-        return $this->render('todo_list/update.html.twig',[
-            'todo' => $todo,
-            'form' => $updateForm->createView(),
         ]);
-    }
+        
 
+        
+    }
     #[Route('/todolist/delete/{id}', name:'todo_delete')]
     public function delete(int $id, EntityManagerInterface $em, Request $request ): Response
     {

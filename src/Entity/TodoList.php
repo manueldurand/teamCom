@@ -29,6 +29,7 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteur = null;
 
+<<<<<<< HEAD
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reponse = null;
 
@@ -44,6 +45,8 @@ class TodoList
     #[ORM\Column(nullable: true)]
     private ?int $idAuteurReponse = null;
 
+=======
+>>>>>>> parent of 883b5e0 (modification, ajout de l'auteur et date de modification)
     public function getId(): ?int
     {
         return $this->id;
@@ -76,7 +79,6 @@ class TodoList
     public function __construct()
     {
         $this->created = new \DateTime();
-        $this->dateReponse = new \DateTime();
     }
 
     public function getComment(): ?string
@@ -102,6 +104,7 @@ class TodoList
 
         return $this;
     }
+<<<<<<< HEAD
 
     public function getReponse(): ?string
     {
@@ -162,4 +165,6 @@ class TodoList
 
         return $this;
     }
+=======
+>>>>>>> parent of 883b5e0 (modification, ajout de l'auteur et date de modification)
 }
