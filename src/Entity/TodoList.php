@@ -26,8 +26,17 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteur = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reponse = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $dateReponse = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $auteurReponse = null;
 
     public function getId(): ?int
     {
@@ -80,10 +89,47 @@ class TodoList
         return $this->auteur;
     }
 
-    public function setAuteur(string $auteur): self
+    public function setAuteur(?string $auteur): self
     {
         $this->auteur = $auteur;
 
         return $this;
     }
+
+    public function getReponse(): ?string
+    {
+        return $this->reponse;
+    }
+
+    public function setReponse(?string $reponse): self
+    {
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
+    public function getDateReponse(): ?\DateTimeInterface
+    {
+        return $this->dateReponse;
+    }
+
+    public function setDateReponse(?\DateTimeInterface $dateReponse): self
+    {
+        $this->dateReponse = $dateReponse;
+
+        return $this;
+    }
+
+    public function getAuteurReponse(): ?string
+    {
+        return $this->auteurReponse;
+    }
+
+    public function setAuteurReponse(?string $auteurReponse): self
+    {
+        $this->auteurReponse = $auteurReponse;
+
+        return $this;
+    }
+
 }
