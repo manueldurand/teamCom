@@ -29,7 +29,6 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteur = null;
 
-<<<<<<< HEAD
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reponse = null;
 
@@ -39,14 +38,6 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteurReponse = null;
 
-    #[ORM\Column]
-    private ?int $idAuteur = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $idAuteurReponse = null;
-
-=======
->>>>>>> parent of 883b5e0 (modification, ajout de l'auteur et date de modification)
     public function getId(): ?int
     {
         return $this->id;
@@ -104,7 +95,6 @@ class TodoList
 
         return $this;
     }
-<<<<<<< HEAD
 
     public function getReponse(): ?string
     {
@@ -142,29 +132,4 @@ class TodoList
         return $this;
     }
 
-    public function getIdAuteur(): ?int
-    {
-        return $this->idAuteur;
-    }
-
-    public function setIdAuteur(int $idAuteur): self
-    {
-        $this->idAuteur = $idAuteur;
-
-        return $this;
-    }
-
-    public function getIdAuteurReponse(): ?int
-    {
-        return $this->idAuteurReponse;
-    }
-
-    public function setIdAuteurReponse(?int $idAuteurReponse): self
-    {
-        $this->idAuteurReponse = $idAuteurReponse;
-
-        return $this;
-    }
-=======
->>>>>>> parent of 883b5e0 (modification, ajout de l'auteur et date de modification)
 }
