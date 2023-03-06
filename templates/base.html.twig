@@ -15,9 +15,11 @@
     </head>
     <body>
         {% block nav %}
+        <a href="{{path('todo_list')}}"><button>TodoList<button></a>
         {% if is_granted('ROLE_USER') %}
             <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
             <a href="{{path('logout')}}" ><button>se déconnecter</button></a>
+            <a href="{{path('account')}}" ><button>mon compte</button></a>
         {% endif %}
          {% if not is_granted('ROLE_USER') %}
          <a href="{{path('app_login')}}" ><button>connexion</button></a>

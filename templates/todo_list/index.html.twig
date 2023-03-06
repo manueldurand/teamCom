@@ -22,8 +22,8 @@
     {% for todo in todo_list%}
 <tr>
 <td>{{ todo.id }}</td>
-<td>{{ todo.auteur }}</td>
 <td>{{ todo.created|date("d/m/Y") }}</td>
+<td>{{ todo.auteur }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
 {% if is_granted('ROLE_USER') %}

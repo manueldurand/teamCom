@@ -19,38 +19,50 @@ class TodoListController extends AbstractController
         $todo_list = $doctrine->getRepository(TodoList::class)->findAll();
         if  ($this->isGranted('IS_AUTHENTICATED_FULLY')){
             
-
-            $user = $this->getUser()->getNom();
+            $user = $this->getUser();
+            $username = $user->getNom();
         } else {
+            $username = '';
             $user = '';
         }
         
 
         return $this->render('todo_list/index.html.twig', [
             'todo_list' => $todo_list,
-            'nom' => $user,
+            'nom' => $username,
+            'user' => $user,
             
         ]);
     }
-
+    /**
+     * @var App\Entity\User $user
+     */
     #[Route('/todolist/new', name: 'new_todo')]
     public function new (Request $request, EntityManagerInterface $em): Response
     {
         // creates a task object and initializes some data for this example
         $task = new Todolist();
         $form = $this->createForm(TodoListType::class, $task);
+        $user = $this->getUser();
+        $username = $user->getNom();
+        dump($username);
     
         
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $username = $user->getNom();
             $task = $form->getData();
             $todo = new TodoList();
+            $todo->setAuteur($user->getNom());
             $todo->setDescription($task->getDescription());
             $todo->setComment($task->getComment());
-            $em->persist($task);
+            $em->persist($todo);
             $em->flush();
 
-            return $this->redirectToRoute('todo_list');
+            return $this->redirectToRoute('todo_list', [
+                'user' => $user,
+            ]);
 
         }
 
@@ -78,6 +90,17 @@ class TodoListController extends AbstractController
         
        
         return $this->redirectToRoute('todo_list');
+    }
+
+    #[Route('/todolist/account', name: 'account')]
+    public function account(ManagerRegistry $doctrine): Response
+    {
+        $user = $this->getUser();
+
+        return $this->render('todo_list/account.html.twig', [
+            'user' => $user,
+        ]);
+
     }
 
 }
