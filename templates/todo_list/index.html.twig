@@ -15,7 +15,7 @@
 <table>
 <thead>
 <tr>
-<td>n°</td><td>date</td><td>description</td><td>comment</td>
+<td>n°</td><td>date</td><td>auteur</td><td>description</td><td>comment</td>
 </tr>
 </thead>
 <tbody>
@@ -23,6 +23,7 @@
 <tr>
 <td>{{ todo.id }}</td>
 <td>{{ todo.created|date("d/m/Y") }}</td>
+<td>{{ todo.auteur }}</td>
 <td>{{ todo.description }}</td>
 <td>{{ todo.comment }}</td>
 {% if is_granted('ROLE_USER') %}

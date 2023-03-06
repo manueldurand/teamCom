@@ -34,11 +34,17 @@ class TodoListController extends AbstractController
     }
 
     #[Route('/todolist/new', name: 'new_todo')]
-    public function new (Request $request, EntityManagerInterface $em): Response
+    public function new (Request $request, EntityManagerInterface $em, ManagerRegistry $doctrine): Response
     {
         // creates a task object and initializes some data for this example
         $task = new Todolist();
         $form = $this->createForm(TodoListType::class, $task);
+            
+
+            $auteur = $this->getUser()->getNom();
+
+
+        dump($auteur);
     
         
         $form->handleRequest($request);
@@ -46,6 +52,7 @@ class TodoListController extends AbstractController
             $task = $form->getData();
             $todo = new TodoList();
             $todo->setDescription($task->getDescription());
+            $todo->setAuteur($auteur);
             $todo->setComment($task->getComment());
             $em->persist($task);
             $em->flush();
@@ -57,7 +64,8 @@ class TodoListController extends AbstractController
 
         return $this->render('todo_list/new.html.twig', [
             'form' => $form->createView(),
-            'data' => $task
+            'data' => $task,
+            'auteur' => $auteur,
         ]);
         
 
