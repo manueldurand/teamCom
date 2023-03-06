@@ -38,6 +38,12 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteurReponse = null;
 
+    #[ORM\Column]
+    private ?int $idAuteur = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $idAuteurReponse = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -129,6 +135,30 @@ class TodoList
     public function setAuteurReponse(?string $auteurReponse): self
     {
         $this->auteurReponse = $auteurReponse;
+
+        return $this;
+    }
+
+    public function getIdAuteur(): ?int
+    {
+        return $this->idAuteur;
+    }
+
+    public function setIdAuteur(int $idAuteur): self
+    {
+        $this->idAuteur = $idAuteur;
+
+        return $this;
+    }
+
+    public function getIdAuteurReponse(): ?int
+    {
+        return $this->idAuteurReponse;
+    }
+
+    public function setIdAuteurReponse(?int $idAuteurReponse): self
+    {
+        $this->idAuteurReponse = $idAuteurReponse;
 
         return $this;
     }
