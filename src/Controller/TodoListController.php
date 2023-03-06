@@ -72,9 +72,33 @@ class TodoListController extends AbstractController
             'data' => $task
         ]);
         
-
-        
     }
+
+    #[Route('/todolist/update/{id}', name: 'update_todo')]
+    public function update_todo(int $id, Request $request, EntityManagerInterface $em)
+    {
+        $todo = $em->getRepository(TodoList::class)->find($id);
+        $updateForm = $this->createForm(UpdateFormType::class, $todo);
+
+        $updateForm->handleRequest($request);
+        if($updateForm->isSubmitted() && $updateForm->isValid()) {
+            $user = $this->getUser();
+            $username = $user->getNom();
+            $updateTask = $updateForm->getData();
+            $todo->setReponse($updateTask->getReponse());
+            $todo->setAuteurReponse($username);
+            $em->persist($todo);
+            $em->flush();
+            return $this->redirectToRoute('todo_list', [
+                'user' => $user,
+            ]);
+        }
+        return $this->render('todo_list/update.html.twig',[
+            'todo' => $todo,
+            'form' => $updateForm->createView(),
+        ]);
+    }
+
     #[Route('/todolist/delete/{id}', name:'todo_delete')]
     public function delete(int $id, EntityManagerInterface $em, Request $request ): Response
     {
