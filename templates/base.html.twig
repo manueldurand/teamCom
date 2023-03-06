@@ -17,6 +17,7 @@
     </head>
     <body>
         {% block nav %}
+        <nav class="navbar-brand">
         <a href="{{path('todo_list')}}"><button>TodoList<button></a>
         {% if is_granted('ROLE_USER') %}
             <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
@@ -26,6 +27,7 @@
          {% if not is_granted('ROLE_USER') %}
          <a href="{{path('app_login')}}" ><button>connexion</button></a>
          {% endif %}
+         </nav>
         {% endblock %}
         {% block body %}{% endblock %}
     </body>
