@@ -7,6 +7,7 @@ use App\Form\TodoListType;
 use App\Form\UpdateFormType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +19,8 @@ class TodoListController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $todo_list = $doctrine->getRepository(TodoList::class)->findAll();
-        if  ($this->isGranted('IS_AUTHENTICATED_FULLY')){
-            
+
+        if  ($this->isGranted('IS_AUTHENTICATED_FULLY')){    
             $user = $this->getUser();
             $username = $user->getNom();
         } else {
@@ -37,10 +38,13 @@ class TodoListController extends AbstractController
     }
     /**
      * @var App\Entity\User $user
+     * 
      */
     #[Route('/todolist/new', name: 'new_todo')]
+    #[IsGranted('ROLE_USER')]
     public function new (Request $request, EntityManagerInterface $em): Response
     {
+        
         // creates a task object and initializes some data for this example
         $task = new Todolist();
         $form = $this->createForm(TodoListType::class, $task);
@@ -58,6 +62,7 @@ class TodoListController extends AbstractController
             $todo->setAuteur($user->getNom());
             $todo->setDescription($task->getDescription());
             $todo->setComment($task->getComment());
+            $todo->setUser($user);
             $em->persist($todo);
             $em->flush();
 
@@ -88,6 +93,7 @@ class TodoListController extends AbstractController
             $updateTask = $updateForm->getData();
             $todo->setReponse($updateTask->getReponse());
             $todo->setAuteurReponse($username);
+            $todo->setCommentUser($user);
             $em->persist($todo);
             $em->flush();
             return $this->redirectToRoute('todo_list', [
@@ -121,9 +127,12 @@ class TodoListController extends AbstractController
     public function account(ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
+        $todolist = $doctrine->getRepository(TodoList::class)->findAllByUser($user);
+
 
         return $this->render('todo_list/account.html.twig', [
             'user' => $user,
+            'todolist' => $todolist,
         ]);
 
     }

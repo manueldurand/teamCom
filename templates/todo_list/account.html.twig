@@ -3,15 +3,55 @@
 {% block title %}Todolist{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
 <div class="example-wrapper">
     <h1>Mon compte </h1>
     <h2>Bonjour {{ user.nom }}</h2>
     <h4>votre adresse mail : {{user.email}}</h4>
-    
+    <h4>vos todo</h4>
 
-    {% endblock %}
+<table class="table border-primary" >
+<thead>
+<tr class="">
+<td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
+<td>modif/</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+</tr>
+</thead>
+<tbody>
+    {% for todo in todolist%}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+<td>
+{%if(todo.user)%}
+{{ todo.user.nom }}
+{% endif %}</td>
+<td class="col-3">{{ todo.description }}</td>
+<td class="col-3">{{ todo.comment }}</td>
+<td class="col-3">{{ todo.reponse }}</td>
+<td>{{ todo.auteurReponse }}</td>
+<td>{{ todo.dateReponse|date("d/m/Y")}}</td>
+
+{% if is_granted('ROLE_USER') %}
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+</form></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >modifier</button></a></td>
+
+{% endif %}
+</tr>
+
+{% endfor %}
+</tbody>
+</table>
+
+
+
+
+</div>
+
+
+{% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $nom = 'John';
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TodoList::class)]
+    private Collection $todoLists;
+
+    public function __construct()
+    {
+        $this->todoLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +122,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TodoList>
+     */
+    public function getTodoLists(): Collection
+    {
+        return $this->todoLists;
+    }
+
+    public function addTodoList(TodoList $todoList): self
+    {
+        if (!$this->todoLists->contains($todoList)) {
+            $this->todoLists->add($todoList);
+            $todoList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodoList(TodoList $todoList): self
+    {
+        if ($this->todoLists->removeElement($todoList)) {
+            // set the owning side to null (unless already changed)
+            if ($todoList->getUser() === $this) {
+                $todoList->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -38,6 +38,9 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $auteurReponse = null;
 
+    #[ORM\ManyToOne(inversedBy: 'todoLists')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +131,18 @@ class TodoList
     public function setAuteurReponse(?string $auteurReponse): self
     {
         $this->auteurReponse = $auteurReponse;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
