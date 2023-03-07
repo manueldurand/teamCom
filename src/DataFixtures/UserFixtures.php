@@ -12,6 +12,7 @@ use Faker;
 class UserFixtures extends Fixture
 
 {
+    private $counter = 1;
     public function __construct(private UserPasswordHasherInterface $passwordEncoder)
     {
         $this->faker = Faker\Factory::create("fr_FR");
@@ -36,8 +37,10 @@ class UserFixtures extends Fixture
             $usr->setPassword(
                 $this->passwordEncoder->hashPassword($usr, 'secret')
             );
-            $usr->setRoles(['ROLE_ADMIN']);
             $manager->persist($usr);
+            $this->addReference('usr-'.$this->counter, $usr);
+            $this->counter++;
+            
             
         }
 
