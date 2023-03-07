@@ -29,7 +29,9 @@
 <td class="col-3">{{ todo.description }}</td>
 <td class="col-3">{{ todo.comment }}</td>
 <td class="col-3">{{ todo.reponse }}</td>
-<td>{{ todo.auteurReponse }}</td>
+{%if(todo.commentUser)%}
+<td>{{ todo.commentUser.nom }}</td>
+{% endif %}
 <td>{{ todo.dateReponse|date("d/m/Y")}}</td>
 
 {% if is_granted('ROLE_USER') %}

@@ -59,7 +59,6 @@ class TodoListController extends AbstractController
             $username = $user->getNom();
             $task = $form->getData();
             $todo = new TodoList();
-            $todo->setAuteur($user->getNom());
             $todo->setDescription($task->getDescription());
             $todo->setComment($task->getComment());
             $todo->setUser($user);
@@ -92,7 +91,6 @@ class TodoListController extends AbstractController
             $username = $user->getNom();
             $updateTask = $updateForm->getData();
             $todo->setReponse($updateTask->getReponse());
-            $todo->setAuteurReponse($username);
             $todo->setCommentUser($user);
             $em->persist($todo);
             $em->flush();

@@ -26,8 +26,6 @@ class TodoList
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $auteur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $reponse = null;
@@ -35,11 +33,11 @@ class TodoList
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $dateReponse = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $auteurReponse = null;
-
     #[ORM\ManyToOne(inversedBy: 'todoLists')]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'todolistComments')]
+    private ?user $commentUser = null;
 
     public function getId(): ?int
     {
@@ -87,17 +85,6 @@ class TodoList
         return $this;
     }
 
-    public function getAuteur(): ?string
-    {
-        return $this->auteur;
-    }
-
-    public function setAuteur(?string $auteur): self
-    {
-        $this->auteur = $auteur;
-
-        return $this;
-    }
 
     public function getReponse(): ?string
     {
@@ -123,18 +110,6 @@ class TodoList
         return $this;
     }
 
-    public function getAuteurReponse(): ?string
-    {
-        return $this->auteurReponse;
-    }
-
-    public function setAuteurReponse(?string $auteurReponse): self
-    {
-        $this->auteurReponse = $auteurReponse;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -143,6 +118,18 @@ class TodoList
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCommentUser(): ?user
+    {
+        return $this->commentUser;
+    }
+
+    public function setCommentUser(?user $commentUser): self
+    {
+        $this->commentUser = $commentUser;
 
         return $this;
     }
