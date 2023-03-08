@@ -15,7 +15,7 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
 <table class="table border-primary" >
 <thead>
 <tr class="">
-<td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
+<td>n°</td><td>date</td><td class="col-6">description</td><td>comment</td>
 <td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
 </tr>
 </thead>
@@ -24,10 +24,7 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
 <tr>
 <td>{{ todo.id }}</td>
 <td>{{ todo.created|date("d/m/Y") }}</td>
-<td>
-{%if(todo.user)%}
-{{ todo.user.nom }}
-{% endif %}</td>
+
 <td class="col-3">{{ todo.description }}</td>
 <td class="col-3">{{ todo.comment }}</td>
 <td class="col-3">{{ todo.reponse }}</td>
