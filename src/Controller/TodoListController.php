@@ -5,6 +5,7 @@ use App\Entity\User;
 use App\Entity\TodoList;
 use App\Form\TodoListType;
 use App\Form\UpdateFormType;
+use App\Repository\TodoListRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -126,7 +127,6 @@ class TodoListController extends AbstractController
     {
         $user = $this->getUser();
         $todolist = $doctrine->getRepository(TodoList::class)->findAllByUser($user);
-
 
         return $this->render('todo_list/account.html.twig', [
             'user' => $user,

@@ -31,7 +31,11 @@
 <td>{%if(todo.commentUser)%}
 {{ todo.commentUser.nom }}</td>
 {% endif %}
-<td>{{ todo.dateReponse|date("d/m/Y")}}</td>
+<td>
+{%if(todo.commentUser)%}
+{{ todo.dateReponse|date("d/m/Y")}}
+{% endif %}
+</td>
 
 {% if is_granted('ROLE_USER') %}
 <td><form action="todolist/delete/{{todo.id}}" method="post">

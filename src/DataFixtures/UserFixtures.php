@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\TodoList;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -15,9 +16,14 @@ class UserFixtures extends Fixture
     private $counter = 1;
     public function __construct(private UserPasswordHasherInterface $passwordEncoder)
     {
-        $this->faker = Faker\Factory::create("fr_FR");
+        
     }
-    public function load(ObjectManager $manager): void
+    public function load(ObjectManager $manager)
+    {
+        $this->loadUser($manager);
+        $this->loadTodo($manager);
+    }
+    public function loadUser(ObjectManager $manager): void
     {
         $admin = new User();
         $admin->setNom('admin');
@@ -41,6 +47,33 @@ class UserFixtures extends Fixture
             $this->addReference('usr-'.$this->counter, $usr);
             $this->counter++;
             
+             
+        }
+
+        $manager->flush();
+    }
+
+    public function loadTodo(ObjectManager $manager): void
+    {
+        $faker = Faker\Factory::create('fr_FR');
+
+        $description = 'nouvelle tache ';
+        $comment = 'new comment ';
+        
+        for ($i = 0; $i <10; $i++){
+            $todo = new TodoList();
+            $todo->setDescription($description.$i);
+            $todo->setComment($comment.$i);
+            $todo->setUser($this->getReference('usr-'.rand(1,5)));
+            $manager->persist($todo);
+            
+        }
+        for ($i = 0; $i <10; $i++){
+            $todo = new TodoList();
+            $todo->setDescription($faker->sentence);
+            $todo->setComment($faker->words(3, true));
+            $todo->setUser($this->getReference('usr-'.rand(1,5)));
+            $manager->persist($todo);
             
         }
 
