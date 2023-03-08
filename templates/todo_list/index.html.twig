@@ -13,7 +13,7 @@
 <thead>
 <tr class="">
 <td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
-<td>modif/</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+<td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
 </tr>
 </thead>
 <tbody>
@@ -36,17 +36,17 @@
 {{ todo.dateReponse|date("d/m/Y")}}
 {% endif %}
 </td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a></td>
 
-{% if is_granted('ROLE_USER') %}
+{% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
 <td><form action="todolist/delete/{{todo.id}}" method="post">
     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
     <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
 
     <button class="text-bg-danger p-1" type="submit">Supprimer</button>
 </form></td>
-<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >modifier</button></a></td>
-
 {% endif %}
+
 </tr>
 
 {% endfor %}

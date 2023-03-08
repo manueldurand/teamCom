@@ -25,13 +25,22 @@ class UserFixtures extends Fixture
     }
     public function loadUser(ObjectManager $manager): void
     {
+        $supadmin = new User();
+        $supadmin->setNom('supadmin');
+        $supadmin->setEmail('supadmin@mail.com');
+        $supadmin->setPassword(
+            $this->passwordEncoder->hashPassword($supadmin, 'supadmin')
+        );
+        $supadmin->setRoles(['ROLE_SUPER_ADMIN']);
+        $manager->persist($supadmin);
+
         $admin = new User();
         $admin->setNom('admin');
         $admin->setEmail('admin@mail.com');
         $admin->setPassword(
             $this->passwordEncoder->hashPassword($admin, 'admin')
         );
-        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setRoles(['ROLE_ADMIN', 'ROLE_ALLOWED_TO_SWITCH']);
         $manager->persist($admin);
 
         $faker = Faker\Factory::create('fr_FR');

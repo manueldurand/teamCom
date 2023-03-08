@@ -8,7 +8,7 @@
 <div class="example-wrapper m-2">
     <h1>Todo List : </h1>
     <h2 class="ml-10" >Les posts de {{ nom }}</h2>
-    {% if user.todolistComments is empty  %}
+    {% if user.todolists is empty  %}
     <h3>Il n'y a rien à afficher</h3>
     {% endif %}
 
@@ -44,7 +44,7 @@
 
     <button class="text-bg-danger p-1" type="submit">Supprimer</button>
 </form></td>
-<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >modifier</button></a></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondrer</button></a></td>
 
 {% endif %}
 </tr>
@@ -58,8 +58,9 @@
 
 <h2>Les posts que {{nom}} a commentés :</h2>
 {% if user.todolistComments is empty  %}
-<h3>Il n'y a rien à afficher</h3>
+<h3>Il n'y a rien à afficher...</h3>
 {% endif %}
+{% if user.todoListComments is not empty %}
 <thead>
 <tr class="">
 <td>n°</td><td>auteur</td><td>date</td><td class="col-6">description</td><td>comment</td>
@@ -98,7 +99,7 @@
 
 </tbody>
 </table>
-
+{% endif %}
 
 
 

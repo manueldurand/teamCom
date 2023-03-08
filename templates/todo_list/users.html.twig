@@ -5,8 +5,8 @@
 {% block body %}
 
     <h2 class="ml-10" >Liste des utilisateurs :</h2>
-<ul>
+<ul class="list-group">
     {% for user in users %}
-<li><a href="{{path('show', {id: user.id})}}">{{user.nom }}</a> : {{ user.email }}</li>
+<li class="list-group-item"><a href="{{path('show', {id: user.id})}}">{{user.nom }}</a> : {{ user.email }}</li>
 {% endfor %}
     {% endblock %}

@@ -136,6 +136,7 @@ class TodoListController extends AbstractController
     }
 
     #[Route('/todolist/users', name: 'users')]
+    #[IsGranted('ROLE_ADMIN', message:"Vous n'avez pas accès à cette page")]
     public function showUsers(ManagerRegistry $doctrine){
         $users = $doctrine->getRepository(User::class)->findAll();
 
