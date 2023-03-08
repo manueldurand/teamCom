@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Todolist{% endblock %}
+
+{% block body %}
+
+
+<div class="example-wrapper m-2">
+    <h1>Todo List : </h1>
+    <h2 class="ml-10" >Les posts de {{ nom }}</h2>
+    {% if user.todolistComments is empty  %}
+    <h3>Il n'y a rien à afficher</h3>
+    {% endif %}
+
+<table class="table border-primary" >
+<thead>
+<tr class="">
+<td>n°</td><td>date</td><td class="col-6">description</td><td>comment</td>
+<td>modif/</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+</tr>
+</thead>
+<tbody>
+    {% for todo in user.todolists %}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+
+<td class="col-3">{{ todo.description }}</td>
+<td class="col-3">{{ todo.comment }}</td>
+<td class="col-3">{{ todo.reponse }}</td>
+<td>{%if(todo.commentUser)%}
+{{ todo.commentUser.nom }}</td>
+{% endif %}
+<td>
+{%if(todo.commentUser)%}
+{{ todo.dateReponse|date("d/m/Y")}}
+{% endif %}
+</td>
+
+{% if is_granted('ROLE_USER') %}
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+</form></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >modifier</button></a></td>
+
+{% endif %}
+</tr>
+
+{% endfor %}
+</tbody>
+
+</table>
+
+<table class="table border-primary" >
+
+<h2>Les posts que {{nom}} a commentés :</h2>
+{% if user.todolistComments is empty  %}
+<h3>Il n'y a rien à afficher</h3>
+{% endif %}
+<thead>
+<tr class="">
+<td>n°</td><td>auteur</td><td>date</td><td class="col-6">description</td><td>comment</td>
+<td>modif/</td><td>date</td><td colspan(2)>actions</td>
+</tr>
+</thead>
+
+<tbody>
+    {% for todo in user.todolistComments %}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.user.nom }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+
+<td class="col-3">{{ todo.description }}</td>
+<td class="col-3">{{ todo.comment }}</td>
+<td class="col-3">{{ todo.reponse }}</td>
+<td>{%if(todo.commentUser)%}
+{{ todo.dateReponse|date("d/m/Y")}}
+{% endif %}
+</td>
+
+{% if is_granted('ROLE_USER') %}
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+</form></td>
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >modifier</button></a></td>
+
+{% endif %}
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+
+
+
+</div>
+{% endblock %}

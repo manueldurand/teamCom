@@ -135,4 +135,26 @@ class TodoListController extends AbstractController
 
     }
 
+    #[Route('/todolist/users', name: 'users')]
+    public function showUsers(ManagerRegistry $doctrine){
+        $users = $doctrine->getRepository(User::class)->findAll();
+
+        return $this->render('todo_list/users.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    #[Route('/todolist/show/{id}', name:'show')]
+    public function showByUser(int $id, ManagerRegistry $doctrine)
+    {
+        $user = $doctrine->getRepository(User::class)->find($id);
+        $username = $user->getNom();
+        $todolistByUser = $doctrine->getRepository(TodoList::class)->find($id);
+        return $this->render('todo_list/show.html.twig', [
+            'todolist' => $todolistByUser,
+            'user' => $user,
+            'nom' => $username,
+        ]);
+    }
+
 }

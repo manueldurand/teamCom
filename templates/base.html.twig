@@ -27,6 +27,9 @@
          {% if not is_granted('ROLE_USER') %}
          <a href="{{path('app_login')}}" ><button>connexion</button></a>
          {% endif %}
+         {% if is_granted('ROLE_ADMIN') %}
+         <a href="{{path('users')}}"><button>Utilisateurs</button></a>
+         {% endif %}
          </nav>
         {% endblock %}
         {% block body %}{% endblock %}
