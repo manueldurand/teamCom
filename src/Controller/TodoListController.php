@@ -8,6 +8,7 @@ use App\Form\UpdateFormType;
 use App\Repository\TodoListRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +18,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class TodoListController extends AbstractController
 {
     #[Route('/todolist', name: 'todo_list')]
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(ManagerRegistry $doctrine, Request $request, PaginatorInterface $paginator): Response
     {
-        $todo_list = $doctrine->getRepository(TodoList::class)->findAll();
+
+        $pagination = $paginator->paginate(
+            $doctrine->getRepository(TodoList::class)->findAllPaginationQuery(),
+            $request->query->getInt('page', 1), /*page number*/
+            15 /* nombre par page*/ 
+        );
 
         if  ($this->isGranted('IS_AUTHENTICATED_FULLY')){    
             $user = $this->getUser();
@@ -31,7 +37,7 @@ class TodoListController extends AbstractController
         
 
         return $this->render('todo_list/index.html.twig', [
-            'todo_list' => $todo_list,
+            'todo_list' => $pagination,
             'nom' => $username,
             'user' => $user,
             

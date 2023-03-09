@@ -56,11 +56,9 @@
 {% endfor %}
 </tbody>
 </table>
-
+{{ knp_pagination_render(todo_list)}}
 
 
 
 </div>
-{#<a href="/todolist/delete/{{todo.id}}" ><button>SUPPRIMER</button></a>
-{{ url('/todolist/delete', { id: todo.id }) }}#}
 {% endblock %}

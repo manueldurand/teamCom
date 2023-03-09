@@ -51,6 +51,18 @@ class TodoListRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+        /**
+     * @return Query
+     */
+    public function findAllPaginationQuery()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+
+        ;
+    }
+
 //    /**
 //     * @return TodoList[] Returns an array of TodoList objects
 //     */
