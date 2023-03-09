@@ -74,19 +74,9 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
-
-function onClickBtnLike(e) {
-    e.preventDefault();
-    const url = this.href;
-    axios.get(url).then(function(response){
-        console.log(response);
-    });
-}
-
-    document.querySelectorAll('a.js-like').forEach(function(link)){
-        link.addEventListener('click', onClickBtnLike);
-    }
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    console.log('hello');
 
 
 
