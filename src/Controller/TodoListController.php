@@ -90,9 +90,8 @@ class TodoListController extends AbstractController
         if($updateForm->isSubmitted() && $updateForm->isValid()) {
             $user = $this->getUser();
             $username = $user->getNom();
-            $updateTask = $updateForm->getData();
-            $todo->setReponse($updateTask->getReponse());
             $todo->setCommentUser($user);
+            $todo->setDateReponse(new \DateTime);
             $em->persist($todo);
             $em->flush();
             return $this->redirectToRoute('todo_list', [

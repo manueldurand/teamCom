@@ -71,7 +71,7 @@ class TodoList
     public function __construct()
     {
         $this->created = new \DateTime();
-        $this->dateReponse = new \DateTime();
+
     }
 
     public function getComment(): ?string

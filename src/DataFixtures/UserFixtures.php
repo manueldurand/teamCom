@@ -77,7 +77,7 @@ class UserFixtures extends Fixture
             $manager->persist($todo);
             
         }
-        for ($i = 0; $i <10; $i++){
+        for ($i = 0; $i <100; $i++){
             $todo = new TodoList();
             $todo->setDescription($faker->sentence);
             $todo->setComment($faker->words(3, true));
