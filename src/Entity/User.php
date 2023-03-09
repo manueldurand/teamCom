@@ -42,10 +42,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'commentUser', targetEntity: TodoList::class)]
     private Collection $todolistComments;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ViewPost::class)]
+    private Collection $viewPosts;
+
     public function __construct()
     {
         $this->todoLists = new ArrayCollection();
         $this->todolistComments = new ArrayCollection();
+        $this->viewPosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,6 +188,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($todolistComment->getCommentUser() === $this) {
                 $todolistComment->setCommentUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ViewPost>
+     */
+    public function getViewPosts(): Collection
+    {
+        return $this->viewPosts;
+    }
+
+    public function addViewPost(ViewPost $viewPost): self
+    {
+        if (!$this->viewPosts->contains($viewPost)) {
+            $this->viewPosts->add($viewPost);
+            $viewPost->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewPost(ViewPost $viewPost): self
+    {
+        if ($this->viewPosts->removeElement($viewPost)) {
+            // set the owning side to null (unless already changed)
+            if ($viewPost->getUser() === $this) {
+                $viewPost->setUser(null);
             }
         }
 

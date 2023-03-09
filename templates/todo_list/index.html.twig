@@ -13,7 +13,7 @@
 <thead>
 <tr class="">
 <td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
-<td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+<td>vues</td><td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
 </tr>
 </thead>
 <tbody>
@@ -27,6 +27,16 @@
 {% endif %}</td>
 <td class="col-3">{{ todo.description }}</td>
 <td class="col-3">{{ todo.comment }}</td>
+<td>
+<a href="{{path('todo_like', {'id': todo.id})}}" class="btn btn-link js-like">
+<span class="js-vues">{{ todo.views | length }}</span>
+{% if user and todo.isViewedByUser(user) %}
+<i class="fas fa-thumbs-up"></i>
+{% else %}
+<i class="far fa-thumbs-up"></i>
+{% endif %}
+<span class="js-label">vues</span>
+</td>
 <td class="col-3">{{ todo.reponse }}</td>
 <td>{%if(todo.commentUser)%}
 {{ todo.commentUser.nom }}</td>
@@ -61,4 +71,24 @@
 
 
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+
+function onClickBtnLike(e) {
+    e.preventDefault();
+    const url = this.href;
+    axios.get(url).then(function(response){
+        console.log(response);
+    });
+}
+
+    document.querySelectorAll('a.js-like').forEach(function(link)){
+        link.addEventListener('click', onClickBtnLike);
+    }
+
+
+
+</script>
 {% endblock %}

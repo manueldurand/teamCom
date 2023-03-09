@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\TodoList;
 use App\Entity\User;
+use App\Entity\ViewPost;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,6 +26,8 @@ class UserFixtures extends Fixture
     }
     public function loadUser(ObjectManager $manager): void
     {
+        $users = [];
+
         $supadmin = new User();
         $supadmin->setNom('supadmin');
         $supadmin->setEmail('supadmin@mail.com');
@@ -45,7 +48,7 @@ class UserFixtures extends Fixture
 
         $faker = Faker\Factory::create('fr_FR');
 
-        for ($i = 1; $i <=5; $i++){
+        for ($i = 1; $i <=10; $i++){
             $usr = new User();
             $usr->setNom($faker->firstName);
             $usr->setEmail($faker->email);
@@ -53,11 +56,12 @@ class UserFixtures extends Fixture
                 $this->passwordEncoder->hashPassword($usr, 'secret')
             );
             $manager->persist($usr);
+            $users[] = $usr;
             $this->addReference('usr-'.$this->counter, $usr);
-            $this->counter++;
-            
-             
+            $this->counter++;   
         }
+
+        
 
         $manager->flush();
     }
@@ -81,11 +85,21 @@ class UserFixtures extends Fixture
             $todo = new TodoList();
             $todo->setDescription($faker->sentence);
             $todo->setComment($faker->words(3, true));
-            $todo->setUser($this->getReference('usr-'.rand(1,5)));
+            $todo->setUser($this->getReference('usr-'.rand(1,10)));
             $manager->persist($todo);
+
+            for($j = 0;$j < mt_rand(0, 10); $j++) {
+                $view = new ViewPost();
+                $view->setPost($todo);
+                $view->setUser($this->getReference('usr-'.rand(1,10)));
+                $manager->persist($view);
+
+    
+            }
             
         }
 
         $manager->flush();
     }
+
 }

@@ -3,11 +3,14 @@
 namespace App\Controller;
 use App\Entity\User;
 use App\Entity\TodoList;
+use App\Entity\ViewPost;
 use App\Form\TodoListType;
 use App\Form\UpdateFormType;
 use App\Repository\TodoListRepository;
+use App\Repository\ViewPostRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -161,6 +164,44 @@ class TodoListController extends AbstractController
             'user' => $user,
             'nom' => $username,
         ]);
+    }
+    /**
+     * permet d'indiquer qu'un post-todo a été vu ou non 
+     */
+    #[Route('/todolist/{id}', name: 'todo_like')]
+    public function view(TodoList $todo, EntityManagerInterface $em, ViewPostRepository $viewpostRepo) : Response  
+    {
+        $user = $this->getUser();
+        if(!$user) {
+          return $this->json([
+            'code' => 403, 
+            'message' => 'vous devez être connecté'
+            , 403]);  
+        } 
+        if($todo->isViewedByUser($user)) {
+            $view = $viewpostRepo->findOneBy([
+                'post' => $todo,
+                'user' => $user
+            ]);
+            $em->remove($view);
+            $em->flush();
+            return $this->json([
+                'code' => 200,
+                'message' => 'like supprimé',
+                'views' => $viewpostRepo->count(['post' => $todo])
+            ], 200);
+        }
+        $view = new ViewPost();
+        $view->setPost($todo);
+        $view->setUser($user);
+        $em->persist($view);
+        $em->flush();
+
+        return $this->json([
+            'code' => 200, 
+            'message' => 'Like ajouté', 
+            'views' => $viewpostRepo->count(['post' => $todo])
+        ], 200);    
     }
 
 }
