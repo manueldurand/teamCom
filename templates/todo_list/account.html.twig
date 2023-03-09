@@ -12,6 +12,7 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
     <h4>votre adresse mail : {{user.email}}</h4>
     <h4>vos posts : </h4>
 {#affichage dans un tableau de tous les posts rédigés#}
+{% if user.todoLists is not empty %}
 <table class="table border-primary" >
 <thead>
 <tr class="">
@@ -28,11 +29,11 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
 <td class="col-3">{{ todo.description }}</td>
 <td class="col-3">{{ todo.comment }}</td>
 <td class="col-3">{{ todo.reponse }}</td>
-<td>{%if(todo.commentUser)%}
+<td>{% if(todo.commentUser)%}
 {{ todo.commentUser.nom }}</td>
 {% endif %}
 <td>
-{%if(todo.commentUser)%}
+{% if(todo.commentUser)%}
 {{ todo.dateReponse|date("d/m/Y")}}
 {% endif %}</td>
 
@@ -51,12 +52,14 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
 {% endfor %}
 </tbody>
 </table>
+{% else %}
+<h4>Il n'y a rien à afficher...</h4>
+{% endif %}
+
 {#affichage dans un tableau de toutes les réponses rédigées#}
 
 <h3>Les posts que vous avez commentés</h3>
-{% if user.todoListComments is empty%}
-<h4>Il n'y a rien à afficher...</h4>
-{% endif %}
+
 {% if user.todoListComments is not empty %}
 <table class="table border-primary" >
 <thead>
@@ -96,6 +99,8 @@ le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utili
 {% endfor %}
 </tbody>
 </table>
+{% else %}
+<h4>Il n'y a rien à afficher...</h4>
 {% endif %}
 </div>
 

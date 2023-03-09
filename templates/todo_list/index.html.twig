@@ -36,7 +36,11 @@
 {{ todo.dateReponse|date("d/m/Y")}}
 {% endif %}
 </td>
-<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a></td>
+<td>
+{% if is_granted('ROLE_USER')%}
+<a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a>
+{% endif %}
+</td>
 
 {% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
 <td><form action="todolist/delete/{{todo.id}}" method="post">
