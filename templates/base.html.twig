@@ -14,25 +14,27 @@
         {% endblock %}
 
         {% block javascripts %}
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="/main.js"></script>
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
         {% block nav %}
-        <nav class="navbar-brand">
-        <a href="{{path('todo_list')}}"><button>TodoList<button></a>
-        {% if is_granted('ROLE_USER') %}
-            <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
-            <a href="{{path('logout')}}" ><button>se déconnecter</button></a>
-            <a href="{{path('account')}}" ><button>mon compte</button></a>
-        {% endif %}
-         {% if not is_granted('ROLE_USER') %}
-         <a href="{{path('app_login')}}" ><button>connexion</button></a>
-         {% endif %}
-         {% if is_granted('ROLE_ADMIN') %}
-         <a href="{{path('users')}}"><button>Utilisateurs</button></a>
-         {% endif %}
-         </nav>
+            <nav class="navbar-brand">
+            <a href="{{path('todo_list')}}"><button>TodoList<button></a>
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{path('new_todo')}}"><button>Ajouter</button></a>
+                <a href="{{path('logout')}}" ><button>se déconnecter</button></a>
+                <a href="{{path('account')}}" ><button>mon compte</button></a>
+            {% endif %}
+            {% if not is_granted('ROLE_USER') %}
+                <a href="{{path('app_login')}}" ><button>connexion</button></a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{path('users')}}"><button>Utilisateurs</button></a>
+            {% endif %}
+            </nav>
         {% endblock %}
         {% block body %}{% endblock %}
     </body>

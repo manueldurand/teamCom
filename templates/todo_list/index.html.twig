@@ -5,80 +5,75 @@
 {% block body %}
 
 
-<div class="example-wrapper m-2">
+<div class="container example-wrapper m-2">
     <h1>Todo List : </h1>
-    <h2 class="ml-10" >Bonjour {{ nom }}</h2>
+    <h2 class="ml-10 bonjour" >Bonjour {{ nom }}</h2>
 
-<table class="table border-primary" >
-<thead>
-<tr class="">
-<td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
-<td>vues</td><td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
-</tr>
-</thead>
-<tbody>
-    {% for todo in todo_list%}
-<tr>
-<td>{{ todo.id }}</td>
-<td>{{ todo.created|date("d/m/Y") }}</td>
-<td>
-{%if(todo.user)%}
-{{ todo.user.nom }}
-{% endif %}</td>
-<td class="col-3">{{ todo.description }}</td>
-<td class="col-3">{{ todo.comment }}</td>
-<td>
-<a href="{{path('todo_like', {'id': todo.id})}}" class="btn btn-link js-like">
-<span class="js-vues">{{ todo.views | length }}</span>
-{% if user and todo.isViewedByUser(user) %}
-<i class="fas fa-thumbs-up"></i>
-{% else %}
-<i class="far fa-thumbs-up"></i>
-{% endif %}
-<span class="js-label">vues</span>
-</td>
-<td class="col-3">{{ todo.reponse }}</td>
-<td>{%if(todo.commentUser)%}
-{{ todo.commentUser.nom }}</td>
-{% endif %}
-<td>
-{%if(todo.commentUser)%}
-{{ todo.dateReponse|date("d/m/Y")}}
-{% endif %}
-</td>
-<td>
-{% if is_granted('ROLE_USER')%}
-<a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a>
-{% endif %}
-</td>
+    <table class="table border-primary" >
+        <thead>
+            <tr class="">
+                <td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
+                <td>vues</td><td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todo_list%}
+            <tr>
+                <td>{{ todo.id }}</td>
+                <td>{{ todo.created|date("d/m/Y") }}</td>
+                <td>{% if (todo.user) %}
+                    {{ todo.user.nom }}
+                    {% endif %}</td>
+                <td class="col-3">{{ todo.description }}</td>
+                <td class="col-3">{{ todo.comment }}</td>
+                <td>
+                    <a href="{{path('todo_like', {'id': todo.id})}}"  class="btn btn-link js-like">
+                    {% if user and todo.isViewedByUser(user) %}
+                    <i class="fas fa-thumbs-up"></i>
+                    {% else %}
+                    <i class="far fa-thumbs-up"></i>
+                    {% endif %}
+                    <span class="js-vues">{{ todo.views | length }}</span>
+                    <span class="js-label">vues</span>
+                    </a>
+                </td>
+                <td class="col-3">{{ todo.reponse }}
+                </td>
+                <td>{% if (todo.commentUser )%}
+                        {{ todo.commentUser.nom }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if (todo.commentUser) %}
+                    {{ todo.dateReponse|date("d/m/Y")}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if is_granted('ROLE_USER') %}
+                    <a href="{{path('update_todo', {id: todo.id})}}">
+                    <button class="text-bg-primary p-1" >Répondre</button>
+                    </a>
+                    {% endif %}
+                </td>
 
-{% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
-<td><form action="todolist/delete/{{todo.id}}" method="post">
-    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
-    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+                <td>
+                    {% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
+                    <form action="todolist/delete/{{todo.id}}" method="post">
+                    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+                    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
 
-    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
-</form></td>
-{% endif %}
-
-</tr>
-
-{% endfor %}
-</tbody>
-</table>
-{{ knp_pagination_render(todo_list)}}
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ knp_pagination_render(todo_list) }}
 
 
 
 </div>
 {% endblock %}
 
-{% block javascripts %}
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    console.log('hello');
-
-
-
-</script>
-{% endblock %}
