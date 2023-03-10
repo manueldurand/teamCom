@@ -28,6 +28,7 @@
                 <td class="col-3">{{ todo.comment }}</td>
                 <td>
                     <a href="{{path('todo_like', {'id': todo.id})}}"  class="btn btn-link js-like">
+                    {# affiche l'icone plein si l'utilisateur a déjà cliqué, sinon l'icone vide #}
                     {% if user and todo.isViewedByUser(user) %}
                     <i class="fas fa-thumbs-up"></i>
                     {% else %}

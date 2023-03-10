@@ -166,7 +166,7 @@ class TodoListController extends AbstractController
         ]);
     }
     /**
-     * permet d'indiquer qu'un post-todo a été vu ou non 
+     * permet d'indiquer qu'un post-todo a été vu ou non grace à une requete ajax
      */
     #[Route('/todolist/{id}', name: 'todo_like')]
     public function view(TodoList $todo, EntityManagerInterface $em, ViewPostRepository $viewpostRepo) : Response  

@@ -15,6 +15,7 @@ function likeOrUnlike(event){
         } else {
             icone.classList.replace('far', 'fas');
         }
+        console.log(response.data.message)
     })
 
 }
