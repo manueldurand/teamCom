@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\TodoList;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,6 +38,29 @@ class TodoListRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    
+    public function findAllByUser($user)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.user', 'u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+        /**
+     * @return Query
+     */
+    public function findAllPaginationQuery()
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+
+        ;
     }
 
 //    /**
