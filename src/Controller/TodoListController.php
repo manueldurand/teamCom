@@ -172,6 +172,7 @@ class TodoListController extends AbstractController
     public function view(TodoList $todo, EntityManagerInterface $em, ViewPostRepository $viewpostRepo) : Response  
     {
         $user = $this->getUser();
+        // si l'utilisateur n'est pas connecté
         if(!$user) {
           return $this->json([
             'code' => 403, 
@@ -179,6 +180,7 @@ class TodoListController extends AbstractController
             , 403]);  
         } 
         if($todo->isViewedByUser($user)) {
+            // si l'utilisateur a déjà cliqué, l'icone change pour indiquer un icone vide, comme non lu, la vue est supprimée de la bdd
             $view = $viewpostRepo->findOneBy([
                 'post' => $todo,
                 'user' => $user
@@ -191,6 +193,8 @@ class TodoListController extends AbstractController
                 'views' => $viewpostRepo->count(['post' => $todo])
             ], 200);
         }
+
+        // sinon on crée une nouvelle vue dans la bdd 
         $view = new ViewPost();
         $view->setPost($todo);
         $view->setUser($user);
