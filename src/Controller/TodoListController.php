@@ -57,7 +57,7 @@ class TodoListController extends AbstractController
             $todo = new TodoList();
             $todo->setAuteur($user->getNom());
             $todo->setDescription($task->getDescription());
-            $todo->setAuteur($auteur);
+            $todo->setAuteur($username);
             $todo->setComment($task->getComment());
             $em->persist($todo);
             $em->flush();
@@ -72,7 +72,7 @@ class TodoListController extends AbstractController
         return $this->render('todo_list/new.html.twig', [
             'form' => $form->createView(),
             'data' => $task,
-            'auteur' => $auteur,
+            'auteur' => $username,
         ]);
         
     }
