@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[ORM\Column(length: 255)]
     private ?string $nom = 'John';
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TodoList::class)]
+    private Collection $todoLists;
+
+    #[ORM\OneToMany(mappedBy: 'commentUser', targetEntity: TodoList::class)]
+    private Collection $todolistComments;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ViewPost::class)]
+    private Collection $viewPosts;
+
+    public function __construct()
+    {
+        $this->todoLists = new ArrayCollection();
+        $this->todolistComments = new ArrayCollection();
+        $this->viewPosts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +130,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TodoList>
+     */
+    public function getTodoLists(): Collection
+    {
+        return $this->todoLists;
+    }
+
+    public function addTodoList(TodoList $todoList): self
+    {
+        if (!$this->todoLists->contains($todoList)) {
+            $this->todoLists->add($todoList);
+            $todoList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodoList(TodoList $todoList): self
+    {
+        if ($this->todoLists->removeElement($todoList)) {
+            // set the owning side to null (unless already changed)
+            if ($todoList->getUser() === $this) {
+                $todoList->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TodoList>
+     */
+    public function getTodolistComments(): Collection
+    {
+        return $this->todolistComments;
+    }
+
+    public function addTodolistComment(TodoList $todolistComment): self
+    {
+        if (!$this->todolistComments->contains($todolistComment)) {
+            $this->todolistComments->add($todolistComment);
+            $todolistComment->setCommentUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodolistComment(TodoList $todolistComment): self
+    {
+        if ($this->todolistComments->removeElement($todolistComment)) {
+            // set the owning side to null (unless already changed)
+            if ($todolistComment->getCommentUser() === $this) {
+                $todolistComment->setCommentUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ViewPost>
+     */
+    public function getViewPosts(): Collection
+    {
+        return $this->viewPosts;
+    }
+
+    public function addViewPost(ViewPost $viewPost): self
+    {
+        if (!$this->viewPosts->contains($viewPost)) {
+            $this->viewPosts->add($viewPost);
+            $viewPost->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeViewPost(ViewPost $viewPost): self
+    {
+        if ($this->viewPosts->removeElement($viewPost)) {
+            // set the owning side to null (unless already changed)
+            if ($viewPost->getUser() === $this) {
+                $viewPost->setUser(null);
+            }
+        }
 
         return $this;
     }

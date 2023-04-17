@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Todolist{% endblock %}
+
+{% block body %}
+{# espace perso affichage des posts rédigés et des réponses rédigées sur les autres posts 
+le bouton Supprimer n'est accessible que sur les posts dont l'auteur est l'utilisateur du compte #}
+
+<div class="example-wrapper">
+    <h1>Mon compte </h1>
+    <h2>Bonjour {{ user.nom }}</h2>
+    <h4>votre adresse mail : {{user.email}}</h4>
+    <h4>vos posts : </h4>
+{# affichage dans un tableau de tous les posts rédigés #}
+{% if user.todoLists is not empty %}
+<table class="table border-primary" >
+<thead>
+<tr class="">
+<td>n°</td><td>date</td><td class="col-6">description</td><td>comment</td>
+<td>réponse</td><td>par</td><td>date</td><td colspan(2)>actions</td>
+</tr>
+</thead>
+<tbody>
+    {% for todo in user.todoLists %}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+
+<td class="col-3">{{ todo.description }}</td>
+<td class="col-3">{{ todo.comment }}</td>
+<td class="col-3">{{ todo.reponse }}</td>
+<td>{% if(todo.commentUser)%}
+{{ todo.commentUser.nom }}</td>
+{% endif %}
+<td>
+{% if(todo.commentUser)%}
+{{ todo.dateReponse|date("d/m/Y")}}
+{% endif %}</td>
+
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a></td>
+
+{% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+</form></td>
+{% endif %}
+</tr>
+
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<h4>Il n'y a rien à afficher...</h4>
+{% endif %}
+
+{#affichage dans un tableau de toutes les réponses rédigées#}
+
+<h3>Les posts que vous avez commentés</h3>
+
+{% if user.todoListComments is not empty %}
+<table class="table border-primary" >
+<thead>
+<tr class="">
+<td>n°</td><td>date</td><td>auteur</td><td class="col-6">description</td><td>comment</td>
+<td>réponse</td><td>date</td><td colspan(2)>actions</td>
+</tr>
+</thead>
+<tbody>
+    {% for todo in user.todoListComments %}
+<tr>
+<td>{{ todo.id }}</td>
+<td>{{ todo.created|date("d/m/Y") }}</td>
+<td>
+{%if(todo.user)%}
+{{ todo.user.nom }}
+{% endif %}</td>
+<td class="col-3">{{ todo.description }}</td>
+<td class="col-3">{{ todo.comment }}</td>
+<td class="col-3">{{ todo.reponse }}</td>
+<td>
+{{ todo.dateReponse|date("d/m/Y")}}
+</td>
+
+<td><a href="{{path('update_todo', {id: todo.id})}}"><button class="text-bg-primary p-1" >Répondre</button></a></td>
+
+{% if (is_granted('ROLE_ADMIN')) or  (is_granted('ROLE_USER') and todo.user.id == user.id)  %}
+<td><form action="todolist/delete/{{todo.id}}" method="post">
+    {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+    <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+    <button class="text-bg-danger p-1" type="submit">Supprimer</button>
+</form></td>
+{% endif %}
+</tr>
+
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<h4>Il n'y a rien à afficher...</h4>
+{% endif %}
+
+
+</div>
+
+
+{% endblock %}
