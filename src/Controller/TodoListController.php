@@ -69,7 +69,7 @@ class TodoListController extends AbstractController
             $task = $form->getData();
             $todo = new TodoList();
             $todo->setDescription($task->getDescription());
-            $todo->setAuteur($username);
+            $todo->setUser($user);
             $todo->setComment($task->getComment());
             $todo->setUser($user);
             $em->persist($todo);
