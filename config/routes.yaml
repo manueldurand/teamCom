@@ -1,3 +1,6 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+todolist:
+    path: /todolist
+    controller: App\Controller\TodoListController::todo_list
